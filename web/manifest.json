@@ -1,11 +1,11 @@
 {
-    "name": "encrypted_counter",
-    "short_name": "encrypted_counter",
+    "name": "service_locator_native",
+    "short_name": "service_locator_native",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
     "theme_color": "#0175C2",
-    "description": "Counter app with encrypted shared preferences.",
+    "description": "A new Flutter project.",
     "orientation": "portrait-primary",
     "prefer_related_applications": false,
     "icons": [
