@@ -21,56 +21,56 @@ class MyApp extends StatelessWidget {
   }
 }
 
-sealed class AppState<S, E extends Exception> {
-  const AppState();
+sealed class StatePattern<S, E extends Exception> {
+  const StatePattern();
 }
 
-final class InitialState<S, E extends Exception> extends AppState<S, E> {
+final class InitialState<S, E extends Exception> extends StatePattern<S, E> {
   const InitialState();
 }
 
-final class LoadingState<S, E extends Exception> extends AppState<S, E> {
+final class LoadingState<S, E extends Exception> extends StatePattern<S, E> {
   const LoadingState();
 }
 
-final class SuccessState<S, E extends Exception> extends AppState<S, E> {
+final class SuccessState<S, E extends Exception> extends StatePattern<S, E> {
   final S data;
 
   const SuccessState({required this.data});
 }
 
-final class ErrorState<S, E extends Exception> extends AppState<S, E> {
+final class ErrorState<S, E extends Exception> extends StatePattern<S, E> {
   final E error;
 
   const ErrorState({required this.error});
 }
 
-sealed class Result<S, E extends Exception> {
-  const Result();
+sealed class ResultPattern<S, E extends Exception> {
+  const ResultPattern();
 
   T fold<T>({
     required T Function(S value) onSuccess,
     required T Function(E error) onError,
   }) {
     switch (this) {
-      case Success(value: final v):
+      case SuccessResult(value: final v):
         return onSuccess(v);
-      case Error(error: final e):
+      case ErrorResult(error: final e):
         return onError(e);
     }
   }
 }
 
-final class Success<S, E extends Exception> extends Result<S, E> {
+final class SuccessResult<S, E extends Exception> extends ResultPattern<S, E> {
   final S value;
 
-  const Success({required this.value});
+  const SuccessResult({required this.value});
 }
 
-final class Error<S, E extends Exception> extends Result<S, E> {
+final class ErrorResult<S, E extends Exception> extends ResultPattern<S, E> {
   final E error;
 
-  const Error({required this.error});
+  const ErrorResult({required this.error});
 }
 
 class UserException implements Exception {
@@ -88,7 +88,7 @@ class UserModel {
   const UserModel({this.name});
 }
 
-typedef UserResult = Result<UserModel, UserException>;
+typedef UserResult = ResultPattern<UserModel, UserException>;
 
 abstract interface class UserRepository {
   Future<UserResult> findOneUser();
@@ -99,14 +99,14 @@ class UserRepositoryImpl implements UserRepository {
   Future<UserResult> findOneUser() async {
     try {
       await Future<void>.delayed(const Duration(seconds: 2));
-      return const Success(value: UserModel(name: 'John Doe'));
+      return const SuccessResult(value: UserModel(name: 'John Doe'));
     } catch (error) {
-      return Error(error: UserException('An error occurred.'));
+      return ErrorResult(error: UserException('An error occurred.'));
     }
   }
 }
 
-typedef UserState = AppState<UserModel, UserException>;
+typedef UserState = StatePattern<UserModel, UserException>;
 
 typedef _ViewModel = StreamStateManagement<UserState>;
 
