@@ -1,12 +1,26 @@
 # Service Locator Native
 
-Native service locator integration demo.
+Minimal demo combining GetIt service location with platform channel communication.
+
+Widgets resolve services from the locator instead of constructor injection trees.
+
+Includes stream-based state management wired to native callbacks.
+
+## Structure
+
+```mermaid
+flowchart LR
+  Widget --> GetItLocator
+  GetItLocator --> NativeBridge
+  NativeBridge --> MethodChannel
+  GetItLocator --> StreamStateManager
+```
 
 ## Stack
 
 | Technology | Version |
 |------------|---------|
-| Dart SDK | ^3.13.2 |
+| Dart SDK | ^3.13.3 |
 | cupertino_icons | ^1.0.8 |
 | flutter_lints | ^6.0.0 |
 | Android Gradle Plugin | 9.1.0 |
